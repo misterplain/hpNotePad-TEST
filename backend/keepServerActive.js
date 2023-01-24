@@ -57,7 +57,7 @@ function keepServerActive() {
   //     console.log(new Date().toLocaleString());
   //   });
 
-  nodeCron.schedule("*/1 * * * *", function logUpdateToServer() {
+  nodeCron.schedule("*/14 * * * *", function logUpdateToServer() {
     // Do whatever you want in here. Send email, Make  database backup or download data.
     try {
       axios.post(
