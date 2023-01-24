@@ -3,11 +3,16 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const keepServerActive = require('./keepServerActive');
+const connectDB = require("./config/connectDB");
 const contactRoute = require("./route/contactRoute");
+const logRoute = require("./route/logRoute");
 
 const app = express();
 
-keepServerActive();
+
+
+//Connect to Mongo DB
+connectDB();
 
 app.use(
   "/",
@@ -18,7 +23,10 @@ app.use(express.json());
 app.use(cors());
 console.log("test");
 
-app.use("/", contactRoute);
+app.use("/contact", contactRoute);
+app.use("/log", logRoute);
+
+keepServerActive();
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const nodemailer = require("nodemailer");
 
-router.post("/contact", (req, res) => {
+router.post("/", (req, res) => {
   const { name, email, message, phoneNum } = req.body;
   if ( message.length === 0) {
     return res.json({ msg: "Please Enter a Message!" });
