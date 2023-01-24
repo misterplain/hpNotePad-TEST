@@ -30,7 +30,7 @@ function keepServerActive() {
   //     console.log("Server is active");
   //   });
 
-  const job = nodeCron.schedule("*1 * * * *", function jobYouNeedToExecute() {
+  const job = nodeCron.schedule("*/1 * * * *", function jobYouNeedToExecute() {
     // Do whatever you want in here. Send email, Make  database backup or download data.
     try {
       let data = {
