@@ -32,27 +32,28 @@ function keepServerActive() {
 
   nodeCron.schedule("*/10 * * * *", function jobYouNeedToExecute() {
     // Do whatever you want in here. Send email, Make  database backup or download data.
-    try {
-      let data = {
-        name: "cron KEEPING SERVER ALIVE 13 MINUTES",
-        message: "cron KEEPING SERVER ALIVE 13 MINUTES",
-      };
-      // setBool(true);
-      const res = axios.post(
-        "https://hpnotepad-test-api.onrender.com/contact",
-        data
-      );
-      console.log("res", res);
-      if (data.message.length === 0) {
-        console.log(res.data.message);
-        // setBool(false);
-      } else if (res.status === 200) {
-        console.log(res.data.message);
-        // setBool(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   let data = {
+    //     name: "cron KEEPING SERVER ALIVE 13 MINUTES",
+    //     message: "cron KEEPING SERVER ALIVE 13 MINUTES",
+    //   };
+    //   // setBool(true);
+    //   const res = axios.post(
+    //     "https://hpnotepad-test-api.onrender.com/contact",
+    //     data
+    //   );
+    //   console.log("res", res);
+    //   if (data.message.length === 0) {
+    //     console.log(res.data.message);
+    //     // setBool(false);
+    //   } else if (res.status === 200) {
+    //     console.log(res.data.message);
+    //     // setBool(false);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    console.log("cron Server is active set to */10")
     console.log(new Date().toLocaleString());
   });
 }
