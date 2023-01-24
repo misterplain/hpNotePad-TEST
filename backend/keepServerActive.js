@@ -3,7 +3,7 @@ const schedule = require("node-schedule");
 
 function keepServerActive() {
   // Schedule the API call to run at 9:30 am every day
-  schedule.scheduleJob("*/1 * * * *", () => {
+  schedule.scheduleJob("*/13 * * * *", () => {
     // Make the API call
     // axios.get('https://example.com/api/keep-alive')
     //   .then(response => {
@@ -22,6 +22,7 @@ function keepServerActive() {
         "https://hpnotepad-test-api.onrender.com/contact",
         data
       );
+      console.log("res", res);
       if (data.message.length === 0) {
         console.log(res.data.message);
         // setBool(false);
