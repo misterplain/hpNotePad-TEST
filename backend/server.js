@@ -6,6 +6,7 @@ const keepServerActive = require('./keepServerActive');
 const connectDB = require("./config/connectDB");
 const contactRoute = require("./route/contactRoute");
 const logRoute = require("./route/logRoute");
+const dataRoute = require("./route/dataRoute");
 
 const app = express();
 
@@ -25,6 +26,7 @@ console.log("test");
 
 app.use("/contact", contactRoute);
 app.use("/log", logRoute);
+app.use("/data", dataRoute);
 
 keepServerActive();
 
