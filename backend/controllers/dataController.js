@@ -1,71 +1,7 @@
-const Data = require("../models/logModel");
+const Data = require("../models/dataModel");
 const asyncHandler = require("express-async-handler");
 const axios = require("axios");
 
-//how chatGBT says to do it
-// Sure! Here's an example of a function that uses setTimeout() to stagger four API calls and store the results in a single object:
-
-// Copy code
-// const fetchAPI1 = async () => {
-//   try {
-//     const response = await axios.get('https://example.com/api1');
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const fetchAPI2 = async () => {
-//   try {
-//     const response = await axios.get('https://example.com/api2');
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const fetchAPI3 = async () => {
-//   try {
-//     const response = await axios.get('https://example.com/api3');
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const fetchAPI4 = async () => {
-//   try {
-//     const response = await axios.get('https://example.com/api4');
-//     return response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// const saveDataToDB = data => {
-//   // Code to save data to the database
-//   //...
-// };
-
-// const gatherData = async () => {
-//   const data = {};
-//   data.data1 = await fetchAPI1();
-//   setTimeout(async () => {
-//     data.data2 = await fetchAPI2();
-//     setTimeout(async () => {
-//       data.data3 = await fetchAPI3();
-//       setTimeout(async () => {
-//         data.data4 = await fetchAPI4();
-//         saveDataToDB(data);
-//       }, 3000); // delay of 3 seconds
-//     }, 3000); // delay of 3 seconds
-//   }, 3000); // delay of 3 seconds
-// };
-
-// gatherData();
-
-/////////////////////////////
-
 // const getJoke = () => {
 //   const options = {
 //     method: "GET",
@@ -75,174 +11,127 @@ const axios = require("axios");
 //       "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
 //     },
 //   };
-
-//   // axios
-//   //   .request(options)
-//   //   .then(function (response) {
-//   //     //setup
-//   //     console.log(response.data.body[0].setup);
-//   //     //punchline
-//   //     console.log(response.data.body[0].punchline);
-//   //     console.log(response.data + "response from within getJoke")
-//   //     return response
-//   //   })
-//   //   .catch(function (error) {
-//   //     console.error(error);
-//   //   });
 
 //   try {
 //     const response = axios.request(options);
-//     console.log(response.data + "response from within getJoke");
-//     return response;
+//     return response.data.body
 //   } catch (error) {
 //     console.log(error);
 //   }
 // };
 
-// const getJoke = async (req,res) => {
-//   const options = {
-//     method: "GET",
-//     url: "https://dad-jokes.p.rapidapi.com/random/joke",
-//     headers: {
-//       "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
-//       "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
-//     },
-//   };
+// // @desc    fetch data
+// // @route   get /api/data
+// // @access  Public
+// const fetchData = asyncHandler(async (req, res) => {
+//   let date = new Date();
+//   const object = {};
 
-//   try {
-//     const response = await axios.request(options);
-//     console.log(response.data + "response from within getJoke");
-//     return response.status(200).json(response.data);
-//   } catch (error) {
-//     return error.status(400).json(error);
-//     console.log(error);
-//   }
-// }
+//   console.log(object);
 
-// const getJoke = () => {
-//   const options = {
-//     method: "GET",
-//     url: "https://dad-jokes.p.rapidapi.com/random/joke",
-//     headers: {
-//       "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
-//       "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
-//     },
-//   };
+//   setTimeout(async () => {
+//     object.joke = await getJoke();
+//     setTimeout(async () => {
+//       console.log(object);
+//       setTimeout(async () => {
+//         console.log(object.joke.data.body[0]?.setup);
+//         console.log(object.joke.data.body[0]?.punchline);
+//         saveDataToDB(object);
+//       }, 10000); // delay of 3 seconds
+//     }, 10000); // delay of 3 seconds
+//   }, 10000); // delay of 3 seconds
 
-// try{
-//   const response = axios.request(options);
-//   // console.log(response + "response from within getJoke");
-//   return response;
-// } catch (error) {
-//   console.log(error);
-// }
+// });
+
+// const saveDataToDB = async (passedFromCall, req, res) => {
+// let time = new Date();
+
+// const newData = await Data.create({
+//   date: time,
+//   joke: {
+//     setup:  passedFromCall.joke.data.body[0].setup.toString(),
+//     punchline: passedFromCall.joke.data.body[0].punchline.toString(),
+//   },
+// });
+// await newData.save();
+
 // };
 
-const getJoke = () => {
+//refactoried with an API that produces 1000 requests per day
+
+const getHoroscope = async () => {
   const options = {
-    method: "GET",
-    url: "https://dad-jokes.p.rapidapi.com/random/joke",
+    method: "POST",
+    url: "https://sameer-kumar-aztro-v1.p.rapidapi.com/",
+    params: { sign: "gemini", day: "today" },
     headers: {
       "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
-      "X-RapidAPI-Host": "dad-jokes.p.rapidapi.com",
+      "X-RapidAPI-Host": "sameer-kumar-aztro-v1.p.rapidapi.com",
     },
   };
 
-  // axios
-  //   .request(options)
-  //   .then(function (response) {
-  //     //setup
-  //     // console.log(response.data.body[0].setup);
-  //     // //punchline
-  //     // console.log(response.data.body[0].punchline);
-  //     // console.log(response.data.body[0].punchline)
-  //     // const joke = {{response.data.body[0].punchline, response.data.body[0].setup}}
-  //     const setup = response.data.body[0].setup;
-  //     const punchline = response.data.body[0].punchline;
-  //     console.log(setup, punchline);
-  //     return {
-  //       setup,
-  //       punchline,
-  //     };
-  //   })
-  //   .catch(function (error) {
-  //     console.error(error);
-  //   });
-
   try {
-    const response = axios.request(options);
-    // const setup = response.data.body[0].setup;
-    // const punchline = response.data.body[0].punchline;
-    const joke = response
-    console.log(joke);
-    return joke
-    // return { setup, punchline };
+    let response = await axios.request(options);
+    let horoscopeData = response.data;
+    // gatherData( data);
+    return horoscopeData;
   } catch (error) {
     console.log(error);
   }
 };
 
+function gatherData(newData) {
+  let objectGathered = {};
+  let time = new Date();
+  objectGathered.date = time;
+  objectGathered.newData = newData;
+  console.log(objectGathered + "objectGathered");
+  return objectGathered;
+}
+
 // @desc    fetch data
 // @route   get /api/data
 // @access  Public
 const fetchData = asyncHandler(async (req, res) => {
-  // getJoke()
-  let date = new Date();
-  const object = {};
-
-  console.log(object);
+  let time = new Date();
+  let fetchedDataObject = {};
+  fetchedDataObject.date = time;
 
   setTimeout(async () => {
-    object.joke = await getJoke();
+    let horoscopeData = await getHoroscope();
     setTimeout(async () => {
-      console.log(object);
+      console.log(
+        horoscopeData.description +
+          "horoscope after 10 seconds after first call"
+      );
       setTimeout(async () => {
-        console.log(object.joke.data.body[0]?.setup);
-        console.log(object.joke.data.body[0]?.punchline);
-        saveDataToDB(object);
-      }, 10000); // delay of 3 seconds
-    }, 10000); // delay of 3 seconds
-  }, 10000); // delay of 3 seconds
-
-
+        fetchedDataObject.horoscope = horoscopeData.description;
+        saveDataToDB(fetchedDataObject);
+      }, 3000); // delay of 3 seconds
+    }, 3000); // delay of 3 seconds
+  }, 3000); // delay of 3 seconds
 });
 
-const saveDataToDB = async (passedFromCall, req, res) => {
-// let object = {
+const saveDataToDB = async (objectToSave, req, res) => {
+  let time = new Date();
 
-// }
-let time = new Date();
+  const newData = new Data({
+    date: time,
+    horoscope: objectToSave.horoscope,
+  });
+  newData
+    .save((error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("saved to db");
+      }
+    })
+    // .then((result) => {
+    //   console.log("note saved!");
+    // });
 
-// object = {
-//   date: time,
-//   joke: {
-//     setup: passedFromCall.joke.data.body[0].setup.toString(),
-//     punchline: passedFromCall.joke.data.body[0].punchline.toString(),
-//   }
-// }
-// console.log({object} + "object to save to database" )
-// console.debug(object)
-
-const newData = await Data.create({
-  date: time,
-  joke: {
-    setup:  passedFromCall.joke.data.body[0].setup.toString(),
-    punchline: passedFromCall.joke.data.body[0].punchline.toString(),
-  },
-});
-await newData.save();
-
-// if (newData) {
-//   // Created
-//   return res.status(201).json({ newData });
-// } else {
-//   return res.status(400).json({ message: "was not successful" });
-// }
-
-// console.log(newData)
-
-//save object to database using mongoose and Data mdoel
-
+  console.log(objectToSave + "objectToSave from within saveDataToDB");
 };
 
 module.exports = { fetchData };

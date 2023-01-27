@@ -6,15 +6,19 @@ const dataSchema = new Schema({
         type: Date,
         required: true,
     },
-    joke:{
-        setup:{
-            type: String,
-            required: true,
-        },
-        punchline:{
-            type: String,
-            required: true,
-        }
+    // joke:{
+    //     setup:{
+    //         type: String,
+    //         required: true,
+    //     },
+    //     punchline:{
+    //         type: String,
+    //         required: true,
+    //     }
+    // }
+    horoscope: {
+        type: String,
+        required: true,
     }
 })
  

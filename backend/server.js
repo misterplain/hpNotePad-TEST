@@ -1,8 +1,8 @@
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const keepServerActive = require('./keepServerActive');
+const keepServerActive = require("./keepServerActive");
 const connectDB = require("./config/connectDB");
 const contactRoute = require("./route/contactRoute");
 const logRoute = require("./route/logRoute");
@@ -10,15 +10,10 @@ const dataRoute = require("./route/dataRoute");
 
 const app = express();
 
-
-
 //Connect to Mongo DB
 connectDB();
 
-app.use(
-  "/",
-  express.static(path.resolve(path.join(__dirname, "./build")))
-);
+app.use("/", express.static(path.resolve(path.join(__dirname, "./build"))));
 
 app.use(express.json());
 app.use(cors());
