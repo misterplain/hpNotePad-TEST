@@ -22,14 +22,14 @@ const getJoke = async () => {
   try {
     let response = await axios.request(options);
     if (response.status >= 200 && response.status < 300) {
-      console.log("success");
+      // console.log("success");
       const joke = {
         setup: response.data.body[0].setup,
         punchline: response.data.body[0].punchline,
       };
       return joke;
     } else {
-      console.log("success");
+      // console.log("success");
       return errorMessage;
     }
   } catch (error) {
@@ -149,7 +149,7 @@ const fetchData = asyncHandler(async (req, res) => {
                 console.log(data);
                 horoscopeData[sign] = data;
                 fetchedDataObject.horoscope = horoscopeData;
-                console.log(fetchedDataObject.horoscope);
+                console.log("fetchedData".horoscope);
               })
               .catch((error) => {
                 console.log(error);
@@ -158,23 +158,23 @@ const fetchData = asyncHandler(async (req, res) => {
         });
       }
       setTimeout(async () => {
-        // saveDataToDB(fetchedDataObject);
+        console.log("intermission");
         setTimeout(async () => {
-          console.log(fetchedDataObject);
+          saveDataToDB(fetchedDataObject);
           setTimeout(async () => {
-            console.log(fetchedDataObject);
+            console.log("fetchedData");
             setTimeout(async () => {
-              console.log(fetchedDataObject);
+              console.log("fetchedData");
               setTimeout(async () => {
-                console.log(fetchedDataObject);
+                console.log("fetchedData");
                 setTimeout(async () => {
-                  console.log(fetchedDataObject);
+                  console.log("fetchedData");
                   setTimeout(async () => {
-                    console.log(fetchedDataObject);
+                    console.log("fetchedData");
                     setTimeout(async () => {
-                      console.log(fetchedDataObject);
+                      console.log("fetchedData");
                       setTimeout(async () => {
-                        console.log(fetchedDataObject);
+                        console.log("fetchedData");
                       }, 3000);
                     }, 3000);
                   }, 3000);
@@ -207,9 +207,9 @@ const saveDataToDB = async (objectToSave, req, res) => {
         console.log("saved to db");
       }
     })
-  .then((result) => {
-    console.log("note saved!");
-  });
+    // .then((result) => {
+    //   console.log("note saved!");
+    // });
 
   console.log(objectToSave + "objectToSave from within saveDataToDB");
 };
