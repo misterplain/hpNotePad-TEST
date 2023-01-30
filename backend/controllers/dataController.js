@@ -190,15 +190,14 @@ const fetchData = asyncHandler(async (req, res) => {
 
 const saveDataToDB = async (objectToSave, req, res) => {
   let time = new Date();
+  console.log(objectToSave + "objectToSave from within saveDataToDB");
 
   const newData = new Data({
     date: time,
     horoscope: objectToSave.horoscope,
-    joke: {
-      setup: objectToSave.setup,
-      punchline: objectToSave.punchline,
-    },
+    joke: objectToSave.joke,
   });
+  console.log(newData + "newData from within saveDataToDB")
   newData
     .save((error) => {
       if (error) {
