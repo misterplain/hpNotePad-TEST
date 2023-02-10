@@ -25,7 +25,7 @@ app.use("/log", logRoute);
 app.use("/data", dataRoute);
 
 keepServerActive();
-// scheduledAPICall();
+scheduledAPICall();
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));

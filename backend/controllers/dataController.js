@@ -109,7 +109,10 @@ const getMoonPhase = async () => {
     method: "GET",
     url: "https://moon-phase.p.rapidapi.com/moon_phase/",
     headers: {
-      "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
+      //gmail key
+      // "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
+      //yahoo key
+      'X-RapidAPI-Key': '6055e6d211mshaddfa5288b1aaffp1a1b1ajsnbc9b8ca2a7a6',
       "X-RapidAPI-Host": "moon-phase.p.rapidapi.com",
     },
   };
@@ -119,8 +122,8 @@ const getMoonPhase = async () => {
     if (response.status >= 200 && response.status < 300) {
       console.log("success");
       const moonphaseData = {
-        mainText: response.data.body.properties.mainText,
-        emoji: response.data.body.properties.emoji,
+        mainText: response.data.mainText,
+        emoji: response.data.emoji,
       };
       return moonphaseData;
     } else {
@@ -260,7 +263,7 @@ const fetchData = asyncHandler(async (req, res) => {
       }
       setTimeout(async () => {
         //third api call - moon phase
-        // fetchedDataObject.moonPhase = await getMoonPhase();
+        fetchedDataObject.moonPhase = await getMoonPhase();
         setTimeout(async () => {
           //fourth api call - weather
           fetchedDataObject.forecast = await getForecast();
@@ -300,7 +303,7 @@ const saveDataToDB = async (objectToSave, req, res) => {
     date: time,
     horoscope: objectToSave.horoscope,
     joke: objectToSave.joke,
-    // moonPhase: objectToSave.moonPhase,
+    moonPhase: objectToSave.moonPhase,
     forecast: objectToSave.forecast,
     news: objectToSave.news,
   });
