@@ -103,14 +103,115 @@ const getHoroscope = async (signHS) => {
   }
 };
 
-// function gatherData(newData) {
-//   let objectGathered = {};
-//   let time = new Date();
-//   objectGathered.date = time;
-//   objectGathered.newData = newData;
-//   console.log(objectGathered + "objectGathered");
-//   return objectGathered;
-// }
+//third api call - moonphase
+const getMoonPhase = async () => {
+  const options = {
+    method: "GET",
+    url: "https://moon-phase.p.rapidapi.com/moon_phase/",
+    headers: {
+      "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
+      "X-RapidAPI-Host": "moon-phase.p.rapidapi.com",
+    },
+  };
+
+  try {
+    let response = await axios.request(options);
+    if (response.status >= 200 && response.status < 300) {
+      console.log("success");
+      const moonphaseData = {
+        mainText: response.data.body.properties.mainText,
+        emoji: response.data.body.properties.emoji,
+      };
+      return moonphaseData;
+    } else {
+      console.log("success");
+      return errorMessage;
+    }
+  } catch (error) {
+    console.log(error);
+    return errorMessage;
+  }
+};
+
+//fourt api call - weather
+const getForecast = async () => {
+  const options = {
+    method: "GET",
+    url: "https://forecast9.p.rapidapi.com/rapidapi/forecast/Barcelona/summary/",
+    headers: {
+      "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
+      "X-RapidAPI-Host": "forecast9.p.rapidapi.com",
+    },
+  };
+
+  try {
+    let response = await axios.request(options);
+    if (response.status >= 200 && response.status < 300) {
+      console.log("success");
+      const items = response.data.forecast.items;
+      const extractedData = items.slice(0, 10).map((item) => ({
+        date: item.date,
+        min: item.temperature.min,
+        max: item.temperature.max,
+      }));
+
+      return extractedData;
+    } else {
+      console.log("success");
+      return errorMessage;
+    }
+  } catch (error) {
+    console.log(error);
+    return errorMessage;
+  }
+};
+
+const getNews = async () => {
+  const options = {
+    method: 'GET',
+    url: 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/search/NewsSearchAPI',
+    params: {
+      q: 'spain',
+      pageNumber: '1',
+      pageSize: '10',
+      autoCorrect: 'true',
+      fromPublishedDate: 'null',
+      toPublishedDate: 'null'
+    },
+    headers: {
+      'X-RapidAPI-Key': '0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95',
+      'X-RapidAPI-Host': 'contextualwebsearch-websearch-v1.p.rapidapi.com'
+    }
+  }
+
+
+  try {
+    let response = await axios.request(options);
+    if (response.status >= 200 && response.status < 300) {
+      console.log("success");
+      const items = response.data.value;
+      const extractedData = items.slice(0, 5).map((item) => ({
+        // date: item.date,
+        // min: item.temperature.min,
+        // max: item.temperature.max,
+        title: item.title,
+        url: item.url,
+        description: item.description,
+        body: item.body,
+        snippet: item.snippet,
+        image: item.image.url,
+      }));
+
+      return extractedData;
+    } else {
+      console.log("success");
+      return errorMessage;
+    }
+  } catch (error) {
+    console.log(error);
+    return errorMessage;
+  }
+}
 
 // @desc    fetch data
 // @route   get /api/data
@@ -158,11 +259,14 @@ const fetchData = asyncHandler(async (req, res) => {
         });
       }
       setTimeout(async () => {
-        console.log("intermission");
+        //third api call - moon phase
+        // fetchedDataObject.moonPhase = await getMoonPhase();
         setTimeout(async () => {
-          saveDataToDB(fetchedDataObject);
+          //fourth api call - weather
+          fetchedDataObject.forecast = await getForecast();
           setTimeout(async () => {
-            console.log("fetchedData");
+            //fifth API call - get news
+            fetchedDataObject.news = await getNews();
             setTimeout(async () => {
               console.log("fetchedData");
               setTimeout(async () => {
@@ -174,7 +278,7 @@ const fetchData = asyncHandler(async (req, res) => {
                     setTimeout(async () => {
                       console.log("fetchedData");
                       setTimeout(async () => {
-                        console.log("fetchedData");
+                        saveDataToDB(fetchedDataObject);
                       }, 3000);
                     }, 3000);
                   }, 3000);
@@ -196,19 +300,21 @@ const saveDataToDB = async (objectToSave, req, res) => {
     date: time,
     horoscope: objectToSave.horoscope,
     joke: objectToSave.joke,
+    // moonPhase: objectToSave.moonPhase,
+    forecast: objectToSave.forecast,
+    news: objectToSave.news,
   });
-  console.log(newData + "newData from within saveDataToDB")
-  newData
-    .save((error) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("saved to db");
-      }
-    })
-    // .then((result) => {
-    //   console.log("note saved!");
-    // });
+  console.log(newData + "newData from within saveDataToDB");
+  newData.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("saved to db");
+    }
+  });
+  // .then((result) => {
+  //   console.log("note saved!");
+  // });
 
   console.log(objectToSave + "objectToSave from within saveDataToDB");
 };
