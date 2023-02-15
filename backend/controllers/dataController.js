@@ -326,18 +326,20 @@ const saveDataToDB = async (objectToSave, req, res) => {
 // @access  Public
 
 const getDataByDate = asyncHandler(async (req, res) => {
-  console.log("get data by date accessed");
-  console.log(req.params);
   try {
     const dateToFind = req.params.date;
     const startOfDay = new Date(dateToFind);
     const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000 - 1);
-  
+
     const data = await Data.find({
       date: { $gte: startOfDay, $lte: endOfDay },
     }).exec();
-    console.log(data)
-    res.json(data);
+    if (data && data.length > 0) {
+      res.json(data);
+    } else {
+      console.log("no data for this date");
+      res.status(404).json({ message: "No data for this date" }).end();
+    }
   } catch (error) {
     // console.error(ERROR getting data for date: ${date});
     console.log(error);

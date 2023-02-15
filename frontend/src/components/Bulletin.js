@@ -1,30 +1,55 @@
-import React, { useEffect, useInteral } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Paper, Grid, Typography, Button } from "@mui/material";
-import {fetchData} from "../actions/dashboardActions";
-
-
-
+import { fetchData } from "../actions/dashboardActions";
 
 const Bulletin = () => {
-
-  const  dashboardData  = useSelector((state) => state.dashboardData);
-  console.log(dashboardData)
   const dispatch = useDispatch();
-  const date = new Date();
-  //turn current date into string in format 2023-01-01
-  const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  
+
+  const dashboardState = useSelector((state) => state.dashboard);
+
+  function formatDate(dateTest) {
+    const year = dateTest.getFullYear();
+    const month = String(dateTest.getMonth() + 1).padStart(2, "0");
+    const day = String(dateTest.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const today = new Date();
+  const [displayedDate, setDisplayedDate] = useState(formatDate(today));
+
+  function getPrevDate(displayedDate) {
+    const prevDate = new Date(displayedDate);
+    prevDate.setDate(prevDate.getDate() - 1);
+    setDisplayedDate(formatDate(prevDate));
+    dispatch(fetchData(formatDate(prevDate)));
+  }
+
+  function getNextDate() {
+    const nextDate = new Date(displayedDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+    setDisplayedDate(formatDate(nextDate));
+    dispatch(fetchData(formatDate(nextDate)));
+  }
+
+  function parseDateFormat(dateString) {
+    const date = new Date(dateString);
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  }
 
   useEffect(() => {
-
-    console.log(dateString)
-    if (!dashboardData) {
+    if (!dashboardState.loading && !dashboardState) {
       // dispatch(fetchData(dateString));
-      dispatch(fetchData("2023-2-13"));
+      dispatch(fetchData(formatDate(today)));
     }
-  })
-
+  }, [dashboardState, dispatch]);
 
   return (
     <Grid container justifyContent='center' sx={{ marginTop: "25px" }}>
@@ -54,6 +79,16 @@ const Bulletin = () => {
             </Button>
           </a>
         </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Button onClick={() => getPrevDate(displayedDate)}>
+          PREVIOUS DATE
+        </Button>
+        <Typography>{parseDateFormat(displayedDate)}</Typography>
+        {/* write a function so that the below button will be displayed only if the displayedDate is yesterday or before */}
+        {displayedDate === formatDate(new Date()) ? null : (
+          <Button onClick={() => getNextDate(displayedDate)}>NEXT DATE</Button>
+        )}
       </Grid>
     </Grid>
   );
