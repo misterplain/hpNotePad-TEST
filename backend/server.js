@@ -24,6 +24,7 @@ app.use("/contact", contactRoute);
 app.use("/log", logRoute);
 app.use("/data", dataRoute);
 
+
 keepServerActive();
 scheduledAPICall();
 

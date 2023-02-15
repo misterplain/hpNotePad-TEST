@@ -112,7 +112,7 @@ const getMoonPhase = async () => {
       //gmail key
       // "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
       //yahoo key
-      'X-RapidAPI-Key': '6055e6d211mshaddfa5288b1aaffp1a1b1ajsnbc9b8ca2a7a6',
+      "X-RapidAPI-Key": "6055e6d211mshaddfa5288b1aaffp1a1b1ajsnbc9b8ca2a7a6",
       "X-RapidAPI-Host": "moon-phase.p.rapidapi.com",
     },
   };
@@ -171,22 +171,21 @@ const getForecast = async () => {
 
 const getNews = async () => {
   const options = {
-    method: 'GET',
-    url: 'https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/search/NewsSearchAPI',
+    method: "GET",
+    url: "https://contextualwebsearch-websearch-v1.p.rapidapi.com/api/search/NewsSearchAPI",
     params: {
-      q: 'spain',
-      pageNumber: '1',
-      pageSize: '10',
-      autoCorrect: 'true',
-      fromPublishedDate: 'null',
-      toPublishedDate: 'null'
+      q: "spain",
+      pageNumber: "1",
+      pageSize: "10",
+      autoCorrect: "true",
+      fromPublishedDate: "null",
+      toPublishedDate: "null",
     },
     headers: {
-      'X-RapidAPI-Key': '0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95',
-      'X-RapidAPI-Host': 'contextualwebsearch-websearch-v1.p.rapidapi.com'
-    }
-  }
-
+      "X-RapidAPI-Key": "0824a2c382mshb6a7ecac1677e76p11250cjsndc3ea1d6ec95",
+      "X-RapidAPI-Host": "contextualwebsearch-websearch-v1.p.rapidapi.com",
+    },
+  };
 
   try {
     let response = await axios.request(options);
@@ -212,9 +211,9 @@ const getNews = async () => {
     }
   } catch (error) {
     console.log(error);
-    return errorMessage;
+    return error;
   }
-}
+};
 
 // @desc    fetch data
 // @route   get /api/data
@@ -322,4 +321,28 @@ const saveDataToDB = async (objectToSave, req, res) => {
   console.log(objectToSave + "objectToSave from within saveDataToDB");
 };
 
-module.exports = { fetchData };
+// @desc    fetch data
+// @route   get /api/data
+// @access  Public
+
+const getDataByDate = asyncHandler(async (req, res) => {
+  console.log("get data by date accessed");
+  console.log(req.params);
+  try {
+    const dateToFind = req.params.date;
+    const startOfDay = new Date(dateToFind);
+    const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000 - 1);
+  
+    const data = await Data.find({
+      date: { $gte: startOfDay, $lte: endOfDay },
+    }).exec();
+    console.log(data)
+    res.json(data);
+  } catch (error) {
+    // console.error(ERROR getting data for date: ${date});
+    console.log(error);
+    res.status(500).end();
+  }
+});
+
+module.exports = { fetchData, getDataByDate };
