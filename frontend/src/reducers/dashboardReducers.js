@@ -16,14 +16,16 @@ function formatDate(dateTest) {
     return `${year}-${month}-${day}`;
   }
 
-export const dashboardReducer = (state = {date: `${formatDate(today)}`}, action) => {
+// export const dashboardReducer = (state = {date: `${formatDate(today)}`}, action) => {
+  export const dashboardReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_DATA_REQUEST:
       return { loading: true };
     case FETCH_DATA_SUCCESS:
       return {
         loading: false,
-        dashboardData: action.payload,
+        dashboardData: action.payload[0],
+        date: formatDate(new Date(action.payload[0].date)),
       };
     case FETCH_DATA_FAILURE:
       return { loading: false, error: action.payload };
