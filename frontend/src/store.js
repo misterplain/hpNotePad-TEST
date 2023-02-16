@@ -11,6 +11,7 @@ import { dashboardReducer } from "./reducers/dashboardReducers";
 
 const reducer = combineReducers({
   dashboard: dashboardReducer,
+  
 });
 
 const initialState = {};

@@ -347,4 +347,38 @@ const getDataByDate = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { fetchData, getDataByDate };
+//create function to delete all data f
+// const deleteAllData = asyncHandler(async (req, res) => {
+//   try {
+//     const data = await Data.deleteMany({});
+//     res.json(data);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).end();
+//   }
+// });
+
+//create function to delete all data from before february 8th, 2023
+const deleteAllData = asyncHandler(async (req, res) => {
+  console.log("deleteAllData");
+
+  const dateToFind = "2023-02-12"
+  // const dateToFind = req.params.date;
+  const startOfDay = new Date(dateToFind);
+  console.log(startOfDay);
+  const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000 - 1);
+
+  try {
+    const data = await Data.deleteMany({
+      date: { $lte: endOfDay },
+    });
+    res.json(data);
+    console.log("data deleted")
+  } catch (error) {
+    console.log(error);
+  
+    res.status(500).end();
+  }
+});
+
+module.exports = { fetchData, getDataByDate, deleteAllData };
