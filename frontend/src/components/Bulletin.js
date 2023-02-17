@@ -101,8 +101,8 @@ const Bulletin = () => {
   }
 
   return (
-    <Grid container justifyContent='center' sx={{ marginTop: "25px" }}>
-      <Grid item xs={12} sm={10} md={8} marginBottom>
+    <Grid container justifyContent='center' sx={{ marginTop: "25px" }} spacing={1}>
+      <Grid item xs={12} sm={12} md={12} marginBottom>
         {" "}
         <Box
           sx={{
@@ -139,17 +139,49 @@ const Bulletin = () => {
           <Button onClick={() => getNextDate(displayedDate)}>NEXT DATE</Button>
         )}
       </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={10}
+        md={5}
+     
+        style={{ height: "250px", border: "1px solid blue" }}
+      >
+        forecast
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={10}
+        md={5}
+
+        style={{ height: "250px", border: "1px solid blue" }}
+      >
+        horoscope
+      </Grid>
+            <Grid
+        item
+        xs={12}
+        sm={10}
+        md={10}
+ 
+        style={{ height: "100px", border: "1px solid blue" }}
+      >
+        joke
+      </Grid>
       {dashboardData?.news && (
         <Grid
           item
           xs={12}
-          sm={10}
-          md={10}
+          sm={12}
+          md={12}
           sx={{
-            // boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
-            // backgroundColor: "#faf9f9",
-            // borderRadius: "32px",
+            boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
+
+            backgroundColor: "white",
+            borderRadius: "20px",
             overflow: "hidden",
+            border: "none",
           }}
         >
           <AutoPlaySwipeableViews
@@ -158,7 +190,7 @@ const Bulletin = () => {
             onChangeIndex={handleStepChange}
             enableMouseEvents
             interval={5000}
-            sx={{boxShadow:"none"}}
+            sx={{ boxShadow: "none" }}
           >
             {dashboardData.news &&
               dashboardData?.news.map((step, index) => (
@@ -171,19 +203,35 @@ const Bulletin = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flexDirection: {xs: "column", md: "row"},
+                    flexDirection: { xs: "column", md: "row" },
+                    border: "none",
+                    borderRadius: "15px",
+                    width: "100%",
                   }}
                 >
                   {Math.abs(activeStep - index) <= 1 ? (
                     <>
-                      <Grid item xs={12} md={8} sx={{ marginBottom: "10px", alignItems: "center", justifyContent: "center" }}>
+                      <Grid
+                        item
+                        xs={12}
+                        md={8}
+                        sx={{
+                          marginBottom: "10px",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
                         {" "}
                         <Box
                           component='img'
                           sx={{
                             width: "100%",
                             height: "auto",
-                            boxShadow:"none"
+                            boxShadow: "none",
+                            marginTop: { xs: "none", md: "15px" },
+                            padding: "none",
+                            marginLeft: { xs: "none", md: "30px" },
+                            borderRadius: "20px",
                           }}
                           src={step.image}
                           alt={step.body}
@@ -191,13 +239,21 @@ const Bulletin = () => {
                       </Grid>
                       <Grid item xs={12} md={4}>
                         {" "}
-                        <Card sx={{boxShadow:"none"}}>
+                        <Card
+                          sx={{
+                            boxShadow: {
+                              xs: "none",
+                              md: "30px 30px 45px #adacac, -30px -30px 45px #ffffff",
+                            },
+                            borderRadius: "20px",
+                            marginRight: { xs: "none", md: "30px" },
+                            width: "100%",
+                            margin: "none",
+                            padding: "none",
+                          }}
+                        >
                           <CardContent>
-                            <Typography
-                              variant='h5'
-                              color='purple'
-
-                            >
+                            <Typography variant='h5' color='purple'>
                               {step.title}
                             </Typography>
                             <Typography variant='body' component='div'>
@@ -215,7 +271,7 @@ const Bulletin = () => {
                                 type='submit'
                                 variant='contained'
                                 color='secondary'
-                                style={{ }}
+                                style={{}}
                               >
                                 Learn More
                               </Button>{" "}
