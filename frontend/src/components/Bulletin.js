@@ -142,64 +142,61 @@ const Bulletin = () => {
       {dashboardData?.news && (
         <Grid
           item
-          xs={10}
+          xs={12}
+          sm={10}
+          md={10}
           sx={{
-            paddingTop: "20px",
-            boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
-            backgroundColor: "#faf9f9",
-            borderRadius: "32px",
+            // boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
+            // backgroundColor: "#faf9f9",
+            // borderRadius: "32px",
+            overflow: "hidden",
           }}
         >
-          <Box sx={{}}>
-            <AutoPlaySwipeableViews
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={activeStep}
-              onChangeIndex={handleStepChange}
-              enableMouseEvents
-              interval={5000}
-              containerStyle={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "row",
-                maxWidth: "100%",
-              }}
-            >
-              {dashboardData.news &&
-                dashboardData?.news.map((step, index) => (
-                  <div key={step._id}>
-                    {Math.abs(activeStep - index) <= 1 ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                        }}
-                      >
+          <AutoPlaySwipeableViews
+            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+            index={activeStep}
+            onChangeIndex={handleStepChange}
+            enableMouseEvents
+            interval={5000}
+            sx={{boxShadow:"none"}}
+          >
+            {dashboardData.news &&
+              dashboardData?.news.map((step, index) => (
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  key={step._id}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: {xs: "column", md: "row"},
+                  }}
+                >
+                  {Math.abs(activeStep - index) <= 1 ? (
+                    <>
+                      <Grid item xs={12} md={8} sx={{ marginBottom: "10px", alignItems: "center", justifyContent: "center" }}>
+                        {" "}
                         <Box
                           component='img'
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-
-                            width: "55%",
-
-                            minHeight: "100%",
-
-                            borderRadius: "15px",
+                            width: "100%",
+                            height: "auto",
+                            boxShadow:"none"
                           }}
                           src={step.image}
                           alt={step.body}
                         />
-                        <Card
-                          sx={{
-                            width: "35%",
-                            borderRadius: "0px",
-                          }}
-                        >
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        {" "}
+                        <Card sx={{boxShadow:"none"}}>
                           <CardContent>
                             <Typography
                               variant='h5'
                               color='purple'
-                              gutterBottom
+
                             >
                               {step.title}
                             </Typography>
@@ -218,25 +215,26 @@ const Bulletin = () => {
                                 type='submit'
                                 variant='contained'
                                 color='secondary'
-                                style={{ marginRight: "20px" }}
+                                style={{ }}
                               >
                                 Learn More
                               </Button>{" "}
                             </a>
                           </CardActions>
                         </Card>
-                      </div>
-                    ) : null}
-                  </div>
-                ))}
-            </AutoPlaySwipeableViews>
-
-            {/* </div> */}
+                      </Grid>
+                    </>
+                  ) : null}
+                </Grid>
+              ))}
+          </AutoPlaySwipeableViews>
+          <Grid item xs={12}>
+            {" "}
             <MobileStepper
               steps={dashboardData.news.length}
               position='static'
               activeStep={activeStep}
-              sx={{ width: "40%", margin: "0 auto" }}
+              sx={{ width: "80%", margin: "0 auto" }}
               nextButton={
                 <Button
                   size='small'
@@ -266,36 +264,142 @@ const Bulletin = () => {
                 </Button>
               }
             />
-          </Box>
+          </Grid>
         </Grid>
       )}
-
-      {/* <Grid
-        item
-        xs={12}
-        md={4}
-        sx={{ border: "1px solid purple", height: "300px" }}
-      >
-        forecast
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        md={4}
-        sx={{ border: "1px solid green", height: "300px" }}
-      >
-        horoscrope
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        md={4}
-        sx={{ border: "1px solid blue", height: "300px" }}
-      >
-        joke
-      </Grid> */}
     </Grid>
   );
 };
 
 export default Bulletin;
+
+// {dashboardData?.news && (
+//   <Grid
+//     item
+//     xs={10}
+//     sx={{
+//       paddingTop: "20px",
+//       boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
+//       backgroundColor: "#faf9f9",
+//       borderRadius: "32px",
+//     }}
+//   >
+//     <Box sx={{}}>
+//       <AutoPlaySwipeableViews
+//         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+//         index={activeStep}
+//         onChangeIndex={handleStepChange}
+//         enableMouseEvents
+//         interval={5000}
+//         containerStyle={{
+//           display: "flex",
+//           alignItems: "center",
+//           flexDirection: "row",
+//           maxWidth: "100%",
+//         }}
+//       >
+//         {dashboardData.news &&
+//           dashboardData?.news.map((step, index) => (
+//             <div key={step._id}>
+//               {Math.abs(activeStep - index) <= 1 ? (
+//                 <div
+//                   style={{
+//                     display: "flex",
+//                     justifyContent: "center",
+//                   }}
+//                 >
+//                   <Box
+//                     component='img'
+//                     sx={{
+//                       display: "flex",
+//                       alignItems: "center",
+
+//                       width: "55%",
+
+//                       minHeight: "100%",
+
+//                       borderRadius: "15px",
+//                     }}
+//                     src={step.image}
+//                     alt={step.body}
+//                   />
+//                   <Card
+//                     sx={{
+//                       width: "35%",
+//                       borderRadius: "0px",
+//                     }}
+//                   >
+//                     <CardContent>
+//                       <Typography
+//                         variant='h5'
+//                         color='purple'
+//                         gutterBottom
+//                       >
+//                         {step.title}
+//                       </Typography>
+//                       <Typography variant='body' component='div'>
+//                         {step.description}
+//                       </Typography>
+//                     </CardContent>
+//                     <CardActions>
+//                       <a
+//                         href={step.url}
+//                         target='_blank'
+//                         style={{ textDecoration: "none" }}
+//                       >
+//                         {" "}
+//                         <Button
+//                           type='submit'
+//                           variant='contained'
+//                           color='secondary'
+//                           style={{ marginRight: "20px" }}
+//                         >
+//                           Learn More
+//                         </Button>{" "}
+//                       </a>
+//                     </CardActions>
+//                   </Card>
+//                 </div>
+//               ) : null}
+//             </div>
+//           ))}
+//       </AutoPlaySwipeableViews>
+
+//       {/* </div> */}
+//       <MobileStepper
+//         steps={dashboardData.news.length}
+//         position='static'
+//         activeStep={activeStep}
+//         sx={{ width: "40%", margin: "0 auto" }}
+//         nextButton={
+//           <Button
+//             size='small'
+//             onClick={handleNext}
+//             disabled={activeStep === dashboardData.news.length - 1}
+//           >
+//             Next
+//             {theme.direction === "rtl" ? (
+//               <KeyboardArrowLeft />
+//             ) : (
+//               <KeyboardArrowRight />
+//             )}
+//           </Button>
+//         }
+//         backButton={
+//           <Button
+//             size='small'
+//             onClick={handleBack}
+//             disabled={activeStep === 0}
+//           >
+//             {theme.direction === "rtl" ? (
+//               <KeyboardArrowRight />
+//             ) : (
+//               <KeyboardArrowLeft />
+//             )}
+//             Back
+//           </Button>
+//         }
+//       />
+//     </Box>
+//   </Grid>
+// )}
