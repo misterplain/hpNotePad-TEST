@@ -13,6 +13,7 @@ import {
   CardContent,
   CardMedia,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
@@ -62,6 +63,7 @@ const Bulletin = () => {
   }
   const dashboardState = useSelector((state) => state.dashboard);
   const { dashboardData, loading, error } = dashboardState;
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (Object.keys(dashboardState).length === 0) {
@@ -75,11 +77,13 @@ const Bulletin = () => {
     if (dashboardState.date && dashboardState.date !== displayedDate) {
       dispatch(fetchData(displayedDate));
     }
+
+    setIsLoading(false);
   }, [dashboardState, dispatch, displayedDate, today]);
 
   //swipable
-  const [activeStep, setActiveStep] = React.useState(0);
-  const maxSteps = dashboardData.news.length;
+  const [activeStep, setActiveStep] = useState(0);
+  // const maxSteps = dashboardData.news.length;
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -91,6 +95,10 @@ const Bulletin = () => {
   const handleStepChange = (step) => {
     setActiveStep(step);
   };
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Grid container justifyContent='center' sx={{ marginTop: "25px" }}>
@@ -126,112 +134,142 @@ const Bulletin = () => {
           PREVIOUS DATE
         </Button>
         <Typography>{parseDateFormat(displayedDate)}</Typography>
-        {/* write a function so that the below button will be displayed only if the displayedDate is yesterday or before */}
+
         {displayedDate === formatDate(new Date()) ? null : (
           <Button onClick={() => getNextDate(displayedDate)}>NEXT DATE</Button>
         )}
       </Grid>
-      <Grid item xs={12}>
-        {loading && <Typography>Loading...</Typography>}
-        {error && <Typography>{dashboardState.error}</Typography>}
-        {dashboardData?.joke ? (
-          <>
-            <Typography>{dashboardData.joke.setup}</Typography>
-            <Typography>{dashboardData.joke.punchline}</Typography>
-          </>
-        ) : (
-          <Typography>
-            joke failed to load, please alert patrick ASAP!!!
-          </Typography>
-        )}
-      </Grid>
+      {dashboardData?.news && (
+        <Grid
+          item
+          xs={10}
+          sx={{
+            paddingTop: "20px",
+            boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
+            backgroundColor: "#faf9f9",
+            borderRadius: "32px",
+          }}
+        >
+          <Box sx={{}}>
+            <AutoPlaySwipeableViews
+              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+              index={activeStep}
+              onChangeIndex={handleStepChange}
+              enableMouseEvents
+              interval={5000}
+              containerStyle={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                maxWidth: "100%",
+              }}
+            >
+              {dashboardData.news &&
+                dashboardData?.news.map((step, index) => (
+                  <div key={step._id}>
+                    {Math.abs(activeStep - index) <= 1 ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Box
+                          component='img'
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
 
-      <Grid
-        item
-        xs={12}
-        sx={{
-          border: "1px solid red",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {/* <Box sx={{ maxWidth: 400, flexGrow: 1 }}> */}
-        <Box>
-          <Paper
-            square
-            elevation={0}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              height: 80,
-              pl: 2,
-              bgcolor: "background.default",
-            }}
-          >
-            <Typography>{dashboardData?.news[activeStep].title}</Typography>
-          </Paper>
-          <AutoPlaySwipeableViews
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={activeStep}
-            onChangeIndex={handleStepChange}
-            enableMouseEvents
-            transitionDuration={5}
-          >
-            {dashboardData?.news.map((step, index) => (
-              <div key={step._id}>
-                {Math.abs(activeStep - index) <= 2 ? (
-                  <Box
-                    component='img'
-                    sx={{
-                      height: 255,
-                      display: "block",
-                      maxWidth: 400,
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                    src={step.image}
-                    alt={step.body}
-                  />
-                ) : null}
-              </div>
-            ))}
-          </AutoPlaySwipeableViews>
-          <MobileStepper
-            steps={maxSteps}
-            position='static'
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size='small'
-                onClick={handleNext}
-                disabled={activeStep === maxSteps - 1}
-              >
-                Next
-                {theme.direction === "rtl" ? (
-                  <KeyboardArrowLeft />
-                ) : (
-                  <KeyboardArrowRight />
-                )}
-              </Button>
-            }
-            backButton={
-              <Button
-                size='small'
-                onClick={handleBack}
-                disabled={activeStep === 0}
-              >
-                {theme.direction === "rtl" ? (
-                  <KeyboardArrowRight />
-                ) : (
-                  <KeyboardArrowLeft />
-                )}
-                Back
-              </Button>
-            }
-          />
-        </Box>
-      </Grid>
+                            width: "55%",
+
+                            minHeight: "100%",
+
+                            borderRadius: "15px",
+                          }}
+                          src={step.image}
+                          alt={step.body}
+                        />
+                        <Card
+                          sx={{
+                            width: "35%",
+                            borderRadius: "0px",
+                          }}
+                        >
+                          <CardContent>
+                            <Typography
+                              variant='h5'
+                              color='purple'
+                              gutterBottom
+                            >
+                              {step.title}
+                            </Typography>
+                            <Typography variant='body' component='div'>
+                              {step.description}
+                            </Typography>
+                          </CardContent>
+                          <CardActions>
+                            <a
+                              href={step.url}
+                              target='_blank'
+                              style={{ textDecoration: "none" }}
+                            >
+                              {" "}
+                              <Button
+                                type='submit'
+                                variant='contained'
+                                color='secondary'
+                                style={{ marginRight: "20px" }}
+                              >
+                                Learn More
+                              </Button>{" "}
+                            </a>
+                          </CardActions>
+                        </Card>
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+            </AutoPlaySwipeableViews>
+
+            {/* </div> */}
+            <MobileStepper
+              steps={dashboardData.news.length}
+              position='static'
+              activeStep={activeStep}
+              sx={{ width: "40%", margin: "0 auto" }}
+              nextButton={
+                <Button
+                  size='small'
+                  onClick={handleNext}
+                  disabled={activeStep === dashboardData.news.length - 1}
+                >
+                  Next
+                  {theme.direction === "rtl" ? (
+                    <KeyboardArrowLeft />
+                  ) : (
+                    <KeyboardArrowRight />
+                  )}
+                </Button>
+              }
+              backButton={
+                <Button
+                  size='small'
+                  onClick={handleBack}
+                  disabled={activeStep === 0}
+                >
+                  {theme.direction === "rtl" ? (
+                    <KeyboardArrowRight />
+                  ) : (
+                    <KeyboardArrowLeft />
+                  )}
+                  Back
+                </Button>
+              }
+            />
+          </Box>
+        </Grid>
+      )}
+
       {/* <Grid
         item
         xs={12}
