@@ -14,6 +14,15 @@ import {
   CardMedia,
   Modal,
 } from "@mui/material";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend, CustomTick, Label, Tick
+} from "recharts";
 import { Link } from "react-router-dom";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
@@ -50,6 +59,16 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+// const data = [
+//   { name: "Jan", high: 14, low: 0 },
+//   { name: "Feb", high: 12, low: 2 },
+//   { name: "Mar", high: 16, low: 3 },
+//   { name: "Apr", high: 20, low: 8 },
+//   { name: "May", high: 19, low: 4 },
+//   { name: "Jun", high: 9, low: 2 },
+//   { name: "Jul", high: 6, low: 9 },
+// ];
 
 const Bulletin = () => {
   const theme = useTheme();
@@ -130,6 +149,17 @@ const Bulletin = () => {
     setActiveStep(step);
   };
 
+  // forecast data
+  const dataForecast = dashboardState?.dashboardData.forecast?.map((item, index) => ({
+    keyItem: index,
+    date: item.date, // replace "date" with the actual key name in the forecast object
+    high: item.high, // replace "high" with the actual key name in the forecast object
+    low: item.low, // replace "low" with the actual key name in the forecast object
+  }));
+
+  // console.log(dashboardState.dashboardData.forecast)
+  console.log(dataForecast);
+
   if (isLoading) {
     return <Typography>Loading...</Typography>;
   }
@@ -194,15 +224,48 @@ const Bulletin = () => {
           <Button onClick={() => getNextDate(displayedDate)}>NEXT DATE</Button>
         )}
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={10}
-        md={5}
-        style={{ height: "250px", border: "1px solid blue" }}
-      >
-        forecast
-      </Grid>
+      {dashboardData?.forecast && (
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          md={5}
+          style={{
+            height: { xs: "500px", sm: "300px" },
+            width: "100%",
+            border: "1px solid blue",
+          }}
+        >
+          <Grid item xs={12} sm={12} sx={{display: "flex", justifyContent: "center"}}>
+            <LineChart width={325} height={275} data={dataForecast} style={{border: "1px solid red", padding: "0px"}}>
+              <XAxis dataKey='date' interval={0}/>
+              <YAxis  dataKey="high" label={{ value: "Temperature", angle: -90, position: "insideLeft" }}/>
+              <CartesianGrid strokeDasharray='3 3' />
+              <Tooltip />
+              <Legend />
+              <Line type='monotone' dataKey='high' stroke='#8884d8' />
+              <Line type='monotone' dataKey='low'  stroke='#82ca9d' />
+            </LineChart>
+            {/* <LineChart width={600} height={300} data={dataForecast}>
+  <XAxis dataKey="date" tick={<CustomTick />} />
+  <YAxis>
+    <Label value="Temperature" position="insideLeft" angle={-90} offset={10} />
+    <Tick
+      min={0}
+      max={Math.ceil(Math.max(...dataForecast.map((d) => d.high)) / 5) * 5}
+      interval="preserveStartEnd"
+    />
+  </YAxis>
+  <CartesianGrid strokeDasharray="3 3" />
+  <Tooltip />
+  <Legend />
+  <Line type="monotone" dataKey="high" stroke="#8884d8" />
+  <Line type="monotone" dataKey="low" stroke="#82ca9d" />
+</LineChart> */}
+          </Grid>
+        </Grid>
+      )}
+
       {dashboardData?.horoscope && (
         <Grid
           item
@@ -250,7 +313,6 @@ const Bulletin = () => {
               >
                 {horoscopeIcons[sign]}
               </Grid>
-
             </>
           ))}
         </Grid>
@@ -423,31 +485,24 @@ const Bulletin = () => {
           </Grid>
         </Grid>
       )}
-                    <Modal
-              
-              open={openModal}
-              onClose={handleClose}
-              aria-labelledby='modal-modal-title'
-              aria-describedby='modal-modal-description'
-            >
-              <Box sx={style}>
-                <Typography
-                  id='modal-modal-title'
-                  variant='h6'
-                  component='h2'
-                >
-                 {horoscopeTitle}
-                </Typography>
-                <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-                  {/* {dashboardData.horoscope[sign]} */}
-                  {horoscopeContent}
-
-                </Typography>
-              </Box>
-            </Modal>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={style}>
+          <Typography id='modal-modal-title' variant='h6' component='h2'>
+            {horoscopeTitle}
+          </Typography>
+          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+            {/* {dashboardData.horoscope[sign]} */}
+            {horoscopeContent}
+          </Typography>
+        </Box>
+      </Modal>
     </Grid>
   );
 };
 
 export default Bulletin;
-
