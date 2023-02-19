@@ -12,6 +12,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Modal,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -19,12 +20,45 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { fetchData } from "../actions/dashboardActions";
+import {
+  TbZodiacAries,
+  TbZodiacTaurus,
+  TbZodiacGemini,
+  TbZodiacCancer,
+  TbZodiacLeo,
+  TbZodiacVirgo,
+  TbZodiacLibra,
+  TbZodiacScorpio,
+  TbZodiacSagittarius,
+  TbZodiacCapricorn,
+  TbZodiacAquarius,
+  TbZodiacPisces,
+} from "react-icons/tb";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+//modal style
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "5px solid purple",
+  // border: 'none',
+  boxShadow: 24,
+  p: 4,
+};
 
 const Bulletin = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
+  const [horoscopeTitle, setHoroscopeTitle] = useState("");
+  const [horoscopeContent, setHoroscopeContent] = useState("");
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   function formatDate(dateTest) {
     const year = dateTest.getFullYear();
@@ -100,8 +134,29 @@ const Bulletin = () => {
     return <Typography>Loading...</Typography>;
   }
 
+  //horoscope icons
+  const horoscopeIcons = {
+    aries: <TbZodiacAries />,
+    taurus: <TbZodiacTaurus />,
+    gemini: <TbZodiacGemini />,
+    cancer: <TbZodiacCancer />,
+    leo: <TbZodiacLeo />,
+    virgo: <TbZodiacVirgo />,
+    libra: <TbZodiacLibra />,
+    scorpio: <TbZodiacScorpio />,
+    sagittarius: <TbZodiacSagittarius />,
+    capricorn: <TbZodiacCapricorn />,
+    aquarius: <TbZodiacAquarius />,
+    pisces: <TbZodiacPisces />,
+  };
+
   return (
-    <Grid container justifyContent='center' sx={{ marginTop: "25px" }} spacing={1}>
+    <Grid
+      container
+      justifyContent='center'
+      sx={{ marginTop: "25px" }}
+      spacing={1}
+    >
       <Grid item xs={12} sm={12} md={12} marginBottom>
         {" "}
         <Box
@@ -144,27 +199,68 @@ const Bulletin = () => {
         xs={12}
         sm={10}
         md={5}
-     
         style={{ height: "250px", border: "1px solid blue" }}
       >
         forecast
       </Grid>
+      {dashboardData?.horoscope && (
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          md={5}
+          sx={{
+            height: { xs: "500px", sm: "300px" },
+            border: "1px solid blue",
+            padding: "0px",
+            margin: "0px",
+            width: "100%",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {Object.keys(dashboardData?.horoscope).map((sign, text) => (
+            <>
+              {" "}
+              <Grid
+                item
+                xs={4}
+                sm={3}
+                sx={{
+                  border: "1px solid green",
+                  borderRadius: "10px",
+                  boxShadow: " 8px 5px 8px -1px rgba(119,6,194,0.59);",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "40px",
+                  color: "purple",
+                  // marginLeft: "none",
+                  padding: "10px",
+                  margin: "3px",
+                }}
+                onClick={() => {
+                  console.log(dashboardData.horoscope[sign]);
+                  setHoroscopeContent(dashboardData.horoscope[sign]);
+                  setHoroscopeTitle(sign);
+                  handleOpen();
+                }}
+              >
+                {horoscopeIcons[sign]}
+              </Grid>
+
+            </>
+          ))}
+        </Grid>
+      )}
+
       <Grid
         item
         xs={12}
         sm={10}
-        md={5}
-
-        style={{ height: "250px", border: "1px solid blue" }}
-      >
-        horoscope
-      </Grid>
-            <Grid
-        item
-        xs={12}
-        sm={10}
         md={10}
- 
         style={{ height: "100px", border: "1px solid blue" }}
       >
         joke
@@ -173,8 +269,8 @@ const Bulletin = () => {
         <Grid
           item
           xs={12}
-          sm={12}
-          md={12}
+          sm={10}
+          md={10}
           sx={{
             boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
 
@@ -256,7 +352,11 @@ const Bulletin = () => {
                             <Typography variant='h5' color='purple'>
                               {step.title}
                             </Typography>
-                            <Typography variant='body' component='div'>
+                            <Typography
+                              variant='body'
+                              component='div'
+                              sx={{ display: { xs: "none" } }}
+                            >
                               {step.description}
                             </Typography>
                           </CardContent>
@@ -323,139 +423,31 @@ const Bulletin = () => {
           </Grid>
         </Grid>
       )}
+                    <Modal
+              
+              open={openModal}
+              onClose={handleClose}
+              aria-labelledby='modal-modal-title'
+              aria-describedby='modal-modal-description'
+            >
+              <Box sx={style}>
+                <Typography
+                  id='modal-modal-title'
+                  variant='h6'
+                  component='h2'
+                >
+                 {horoscopeTitle}
+                </Typography>
+                <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+                  {/* {dashboardData.horoscope[sign]} */}
+                  {horoscopeContent}
+
+                </Typography>
+              </Box>
+            </Modal>
     </Grid>
   );
 };
 
 export default Bulletin;
 
-// {dashboardData?.news && (
-//   <Grid
-//     item
-//     xs={10}
-//     sx={{
-//       paddingTop: "20px",
-//       boxShadow: "13px 13px 45px #adacac, -13px -13px 45px #ffffff",
-//       backgroundColor: "#faf9f9",
-//       borderRadius: "32px",
-//     }}
-//   >
-//     <Box sx={{}}>
-//       <AutoPlaySwipeableViews
-//         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-//         index={activeStep}
-//         onChangeIndex={handleStepChange}
-//         enableMouseEvents
-//         interval={5000}
-//         containerStyle={{
-//           display: "flex",
-//           alignItems: "center",
-//           flexDirection: "row",
-//           maxWidth: "100%",
-//         }}
-//       >
-//         {dashboardData.news &&
-//           dashboardData?.news.map((step, index) => (
-//             <div key={step._id}>
-//               {Math.abs(activeStep - index) <= 1 ? (
-//                 <div
-//                   style={{
-//                     display: "flex",
-//                     justifyContent: "center",
-//                   }}
-//                 >
-//                   <Box
-//                     component='img'
-//                     sx={{
-//                       display: "flex",
-//                       alignItems: "center",
-
-//                       width: "55%",
-
-//                       minHeight: "100%",
-
-//                       borderRadius: "15px",
-//                     }}
-//                     src={step.image}
-//                     alt={step.body}
-//                   />
-//                   <Card
-//                     sx={{
-//                       width: "35%",
-//                       borderRadius: "0px",
-//                     }}
-//                   >
-//                     <CardContent>
-//                       <Typography
-//                         variant='h5'
-//                         color='purple'
-//                         gutterBottom
-//                       >
-//                         {step.title}
-//                       </Typography>
-//                       <Typography variant='body' component='div'>
-//                         {step.description}
-//                       </Typography>
-//                     </CardContent>
-//                     <CardActions>
-//                       <a
-//                         href={step.url}
-//                         target='_blank'
-//                         style={{ textDecoration: "none" }}
-//                       >
-//                         {" "}
-//                         <Button
-//                           type='submit'
-//                           variant='contained'
-//                           color='secondary'
-//                           style={{ marginRight: "20px" }}
-//                         >
-//                           Learn More
-//                         </Button>{" "}
-//                       </a>
-//                     </CardActions>
-//                   </Card>
-//                 </div>
-//               ) : null}
-//             </div>
-//           ))}
-//       </AutoPlaySwipeableViews>
-
-//       {/* </div> */}
-//       <MobileStepper
-//         steps={dashboardData.news.length}
-//         position='static'
-//         activeStep={activeStep}
-//         sx={{ width: "40%", margin: "0 auto" }}
-//         nextButton={
-//           <Button
-//             size='small'
-//             onClick={handleNext}
-//             disabled={activeStep === dashboardData.news.length - 1}
-//           >
-//             Next
-//             {theme.direction === "rtl" ? (
-//               <KeyboardArrowLeft />
-//             ) : (
-//               <KeyboardArrowRight />
-//             )}
-//           </Button>
-//         }
-//         backButton={
-//           <Button
-//             size='small'
-//             onClick={handleBack}
-//             disabled={activeStep === 0}
-//           >
-//             {theme.direction === "rtl" ? (
-//               <KeyboardArrowRight />
-//             ) : (
-//               <KeyboardArrowLeft />
-//             )}
-//             Back
-//           </Button>
-//         }
-//       />
-//     </Box>
-//   </Grid>
-// )}
