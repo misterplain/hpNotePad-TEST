@@ -21,7 +21,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend, CustomTick, Label, Tick
+  Legend,
+  CustomTick,
+  Label,
+  Tick,
 } from "recharts";
 import { Link } from "react-router-dom";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -150,14 +153,16 @@ const Bulletin = () => {
   };
 
   // forecast data
-  const dataForecast = dashboardState?.dashboardData.forecast?.map((item, index) => ({
-    keyItem: index,
-    date: item.date, // replace "date" with the actual key name in the forecast object
-    high: item.high, // replace "high" with the actual key name in the forecast object
-    low: item.low, // replace "low" with the actual key name in the forecast object
-  }));
+  const dataForecast = dashboardState?.dashboardData?.forecast?.map(
+    (item, index) => ({
+      keyItem: index,
+      date: item.date, // replace "date" with the actual key name in the forecast object
+      max: item.max, // replace "high" with the actual key name in the forecast object
+      min: item.min, // replace "low" with the actual key name in the forecast object
+    })
+  );
 
-  // console.log(dashboardState.dashboardData.forecast)
+  // // console.log(dashboardState.dashboardData.forecast)
   console.log(dataForecast);
 
   if (isLoading) {
@@ -236,32 +241,36 @@ const Bulletin = () => {
             border: "1px solid blue",
           }}
         >
-          <Grid item xs={12} sm={12} sx={{display: "flex", justifyContent: "center"}}>
-            <LineChart width={325} height={275} data={dataForecast} style={{border: "1px solid red", padding: "0px"}}>
-              <XAxis dataKey='date' interval={0}/>
-              <YAxis  dataKey="high" label={{ value: "Temperature", angle: -90, position: "insideLeft" }}/>
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            <LineChart
+              width={350}
+              height={275}
+              data={dataForecast}
+              style={{  padding: "0px" }}
+            >
+              <XAxis dataKey='date' label={{ value: "day" }} interval={0} tick={false}>
+                {/* <Label value="date" offset={0} position="insideBottomRight" /> */}
+                {/* <Tick angle={-90} textAnchor="end" /> */}
+              </XAxis>
+              <YAxis
+                dataKey='max'
+                label={{
+                  value: "Temperature",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
               <CartesianGrid strokeDasharray='3 3' />
               <Tooltip />
               <Legend />
-              <Line type='monotone' dataKey='high' stroke='#8884d8' />
-              <Line type='monotone' dataKey='low'  stroke='#82ca9d' />
+              <Line type='monotone' dataKey='max' stroke='#8884d8' />
+              <Line type='monotone' dataKey='min' stroke='#82ca9d' />
             </LineChart>
-            {/* <LineChart width={600} height={300} data={dataForecast}>
-  <XAxis dataKey="date" tick={<CustomTick />} />
-  <YAxis>
-    <Label value="Temperature" position="insideLeft" angle={-90} offset={10} />
-    <Tick
-      min={0}
-      max={Math.ceil(Math.max(...dataForecast.map((d) => d.high)) / 5) * 5}
-      interval="preserveStartEnd"
-    />
-  </YAxis>
-  <CartesianGrid strokeDasharray="3 3" />
-  <Tooltip />
-  <Legend />
-  <Line type="monotone" dataKey="high" stroke="#8884d8" />
-  <Line type="monotone" dataKey="low" stroke="#82ca9d" />
-</LineChart> */}
           </Grid>
         </Grid>
       )}
