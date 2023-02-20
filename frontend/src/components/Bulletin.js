@@ -47,31 +47,10 @@ import {
   TbZodiacPisces,
 } from "react-icons/tb";
 // import { makeStyles } from "@mui/styles";
-// import { styled } from "@material-ui/core/styles";
+import { styled } from "@mui/material/styles";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
-// const useStyles = makeStyles({
-//   hiddenText: {
-//     visibility: "hidden",
-//     opacity: 0,
-//     transition: "visibility 0s, opacity 0.5s ease-out",
-//     "&:hover": {
-//       visibility: "visible",
-//       opacity: 1,
-//     },
-//   },
-// });
-
-// const HiddenText = styled("span")({
-//   visibility: "hidden",
-//   opacity: 0,
-//   transition: "visibility 0s, opacity 0.5s ease-out",
-//   "&:hover": {
-//     visibility: "visible",
-//     opacity: 1,
-//   },
-// });
 
 //modal style
 const style = {
@@ -82,23 +61,11 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "5px solid purple",
-  // border: 'none',
   boxShadow: 24,
   p: 4,
 };
 
-// const data = [
-//   { name: "Jan", high: 14, low: 0 },
-//   { name: "Feb", high: 12, low: 2 },
-//   { name: "Mar", high: 16, low: 3 },
-//   { name: "Apr", high: 20, low: 8 },
-//   { name: "May", high: 19, low: 4 },
-//   { name: "Jun", high: 9, low: 2 },
-//   { name: "Jul", high: 6, low: 9 },
-// ];
-
 const Bulletin = () => {
-  // const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -187,9 +154,6 @@ const Bulletin = () => {
     })
   );
 
-  // // console.log(dashboardState.dashboardData.forecast)
-  console.log(dataForecast);
-
   if (isLoading) {
     return <Typography>Loading...</Typography>;
   }
@@ -217,7 +181,14 @@ const Bulletin = () => {
       sx={{ marginTop: "25px" }}
       spacing={1}
     >
-      <Grid item xs={12} sm={12} md={12} marginBottom>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        marginBottom
+        sx={{ borderBottom: "1px solid purple", paddingBottom: "20px" }}
+      >
         {" "}
         <Box
           sx={{
@@ -244,14 +215,47 @@ const Bulletin = () => {
           </a>
         </Box>
       </Grid>
-      <Grid item xs={12}>
-        <Button onClick={() => getPrevDate(displayedDate)}>
-          PREVIOUS DATE
+      <hr />
+      <Grid item xs={12} sx={{ textAlign: "center", marginBottom: "5px" }}>
+        <Typography variant='h3' sx={{ color: "#194D33" }}>
+          daily dashboard
+        </Typography>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        marginBottom
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Button
+          onClick={() => getPrevDate(displayedDate)}
+          sx={{
+            borderRadius: "50px",
+            padding: "0px",
+            margin: "0px",
+            fontSize: "25px",
+            color: "#009688",
+          }}
+        >
+          <FaArrowLeft />
         </Button>
-        <Typography>{parseDateFormat(displayedDate)}</Typography>
+        <Typography variant='h5' sx={{ color: "#880E4F" }}>
+          {parseDateFormat(displayedDate)}
+        </Typography>
 
         {displayedDate === formatDate(new Date()) ? null : (
-          <Button onClick={() => getNextDate(displayedDate)}>NEXT DATE</Button>
+          <Button
+            onClick={() => getNextDate(displayedDate)}
+            sx={{
+              borderRadius: "50px",
+              padding: "0px",
+              margin: "0px",
+              fontSize: "25px",
+              color: "#009688",
+            }}
+          >
+            <FaArrowRight />
+          </Button>
         )}
       </Grid>
       {dashboardData?.forecast && (
@@ -263,7 +267,7 @@ const Bulletin = () => {
           style={{
             height: { xs: "500px", sm: "300px" },
             width: "100%",
-            border: "1px solid blue",
+
             marginBottom: "20px",
           }}
         >
@@ -284,10 +288,7 @@ const Bulletin = () => {
                 label={{ value: "day" }}
                 interval={0}
                 tick={false}
-              >
-                {/* <Label value="date" offset={0} position="insideBottomRight" /> */}
-                {/* <Tick angle={-90} textAnchor="end" /> */}
-              </XAxis>
+              ></XAxis>
               <YAxis
                 dataKey='max'
                 label={{
@@ -314,7 +315,7 @@ const Bulletin = () => {
           md={5}
           sx={{
             height: { xs: "500px", sm: "300px" },
-            border: "1px solid blue",
+
             padding: "0px",
             margin: "0px",
             width: "100%",
@@ -358,16 +359,6 @@ const Bulletin = () => {
           ))}
         </Grid>
       )}
-
-      {/* <Grid
-        item
-        xs={12}
-        sm={10}
-        md={10}
-        style={{ height: "100px", border: "1px solid blue" }}
-      >
-        joke
-      </Grid> */}
       {dashboardData?.joke && (
         <Grid
           item
@@ -387,30 +378,29 @@ const Bulletin = () => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: " center",
-              border: "1px solid blue",
+
               textAlign: "center",
             }}
           >
-            <Typography sx={{ padding: "10px" }}>
+            <Typography
+              sx={{ padding: "10px", color: "purple", fontSize: "20px" }}
+            >
               {dashboardData.joke.setup}
             </Typography>
-            {/* <Typography sx={{ padding: "10px" }}>
-              hover over XX box for answer
-            </Typography> */}
           </Grid>
-          {/* <Grid
+          <Grid
             item
             xs={2}
             sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: " center",
-              border: "1px solid blue",
-              textAlign: "center",
+              color: "green",
+              fontSize: "40px",
             }}
           >
-            <Typography sx={{padding: '10px'}}>hover</Typography>
-          </Grid> */}
+            <FaArrowRight sx={{ color: "green" }} />
+          </Grid>
 
           <Grid
             item
@@ -419,28 +409,19 @@ const Bulletin = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: " center",
-              border: "1px solid blue",
+              borderRadius: "10px",
+              backgroundColor: "lightpurple",
               textAlign: "center",
             }}
           >
-            {" "}
+
             <Typography
               sx={{
                 padding: "10px",
-                // visibility: "hidden",
-                // color: "white",
-                // opacity: 0,
-
-                // "&:hover": {
-                //   visibility: "visible",
-                //   opacity: 1,
-                //   color: "black",
-                //    transition: "visibility 0s, opacity 0.5s ease-out",
-                // },
+                color: "purple",
+                fontSize: "20px",
               }}
-              // className={classes.hiddenText}
             >
-              {/* <HiddenText>{dashboardData.joke.punchline}</HiddenText> */}
               {dashboardData.joke.punchline}
             </Typography>
           </Grid>
@@ -459,6 +440,7 @@ const Bulletin = () => {
             borderRadius: "20px",
             overflow: "hidden",
             border: "none",
+            marginBottom: "50px",
           }}
         >
           <AutoPlaySwipeableViews
@@ -466,7 +448,7 @@ const Bulletin = () => {
             index={activeStep}
             onChangeIndex={handleStepChange}
             enableMouseEvents
-            interval={5000}
+            interval={8000}
             sx={{ boxShadow: "none" }}
           >
             {dashboardData.news &&
@@ -503,7 +485,7 @@ const Bulletin = () => {
                           component='img'
                           sx={{
                             width: "100%",
-                            height: "auto",
+                            maxHeight: "400px",
                             boxShadow: "none",
                             marginTop: { xs: "none", md: "15px" },
                             padding: "none",
@@ -536,7 +518,9 @@ const Bulletin = () => {
                             <Typography
                               variant='body'
                               component='div'
-                              sx={{ display: { xs: "none" } }}
+                              sx={{
+                                visibility: { xs: "hidden", md: "visible" },
+                              }}
                             >
                               {step.description}
                             </Typography>
