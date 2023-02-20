@@ -46,8 +46,32 @@ import {
   TbZodiacAquarius,
   TbZodiacPisces,
 } from "react-icons/tb";
+// import { makeStyles } from "@mui/styles";
+// import { styled } from "@material-ui/core/styles";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+
+// const useStyles = makeStyles({
+//   hiddenText: {
+//     visibility: "hidden",
+//     opacity: 0,
+//     transition: "visibility 0s, opacity 0.5s ease-out",
+//     "&:hover": {
+//       visibility: "visible",
+//       opacity: 1,
+//     },
+//   },
+// });
+
+// const HiddenText = styled("span")({
+//   visibility: "hidden",
+//   opacity: 0,
+//   transition: "visibility 0s, opacity 0.5s ease-out",
+//   "&:hover": {
+//     visibility: "visible",
+//     opacity: 1,
+//   },
+// });
 
 //modal style
 const style = {
@@ -74,6 +98,7 @@ const style = {
 // ];
 
 const Bulletin = () => {
+  // const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
@@ -239,6 +264,7 @@ const Bulletin = () => {
             height: { xs: "500px", sm: "300px" },
             width: "100%",
             border: "1px solid blue",
+            marginBottom: "20px",
           }}
         >
           <Grid
@@ -251,9 +277,14 @@ const Bulletin = () => {
               width={350}
               height={275}
               data={dataForecast}
-              style={{  padding: "0px" }}
+              style={{ padding: "0px" }}
             >
-              <XAxis dataKey='date' label={{ value: "day" }} interval={0} tick={false}>
+              <XAxis
+                dataKey='date'
+                label={{ value: "day" }}
+                interval={0}
+                tick={false}
+              >
                 {/* <Label value="date" offset={0} position="insideBottomRight" /> */}
                 {/* <Tick angle={-90} textAnchor="end" /> */}
               </XAxis>
@@ -291,6 +322,7 @@ const Bulletin = () => {
             flexWrap: "wrap",
             justifyContent: "center",
             alignItems: "center",
+            marginBottom: "20px",
           }}
         >
           {Object.keys(dashboardData?.horoscope).map((sign, text) => (
@@ -327,7 +359,7 @@ const Bulletin = () => {
         </Grid>
       )}
 
-      <Grid
+      {/* <Grid
         item
         xs={12}
         sm={10}
@@ -335,7 +367,85 @@ const Bulletin = () => {
         style={{ height: "100px", border: "1px solid blue" }}
       >
         joke
-      </Grid>
+      </Grid> */}
+      {dashboardData?.joke && (
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          sx={{
+            display: "flex",
+            marginBottom: "40px",
+            justifyContent: "space-around",
+          }}
+        >
+          <Grid
+            item
+            xs={5}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: " center",
+              border: "1px solid blue",
+              textAlign: "center",
+            }}
+          >
+            <Typography sx={{ padding: "10px" }}>
+              {dashboardData.joke.setup}
+            </Typography>
+            {/* <Typography sx={{ padding: "10px" }}>
+              hover over XX box for answer
+            </Typography> */}
+          </Grid>
+          {/* <Grid
+            item
+            xs={2}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: " center",
+              border: "1px solid blue",
+              textAlign: "center",
+            }}
+          >
+            <Typography sx={{padding: '10px'}}>hover</Typography>
+          </Grid> */}
+
+          <Grid
+            item
+            xs={5}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: " center",
+              border: "1px solid blue",
+              textAlign: "center",
+            }}
+          >
+            {" "}
+            <Typography
+              sx={{
+                padding: "10px",
+                // visibility: "hidden",
+                // color: "white",
+                // opacity: 0,
+
+                // "&:hover": {
+                //   visibility: "visible",
+                //   opacity: 1,
+                //   color: "black",
+                //    transition: "visibility 0s, opacity 0.5s ease-out",
+                // },
+              }}
+              // className={classes.hiddenText}
+            >
+              {/* <HiddenText>{dashboardData.joke.punchline}</HiddenText> */}
+              {dashboardData.joke.punchline}
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
       {dashboardData?.news && (
         <Grid
           item
