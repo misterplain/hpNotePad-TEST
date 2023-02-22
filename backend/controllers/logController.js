@@ -1,12 +1,10 @@
 const Log = require("../models/logModel");
 const asyncHandler = require("express-async-handler");
 
-// @desc    Create a log
-// @route   POST /api/log
-// @access  Public
+
 const logServerRefresh = asyncHandler(async (req, res) => {
   let date = new Date();
-  //   const { name, message } = req.body;
+
 
   const log = await Log.create({
     date,
