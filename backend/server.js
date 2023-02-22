@@ -2,8 +2,8 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const keepServerActive = require("./keepServerActive");
-const scheduledAPICall = require("./scheduledAPICall");
+// const keepServerActive = require("./keepServerActive");
+// const scheduledAPICall = require("./scheduledAPICall");
 const connectDB = require("./config/connectDB");
 const contactRoute = require("./route/contactRoute");
 const logRoute = require("./route/logRoute");
@@ -24,8 +24,8 @@ app.use("/contact", contactRoute);
 app.use("/log", logRoute);
 app.use("/data", dataRoute);
 
-keepServerActive();
-scheduledAPICall();
+// keepServerActive();
+// scheduledAPICall();
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static("client/build"));

@@ -33,20 +33,7 @@ const date = new Date();
 const time = date.toLocaleTimeString();
 
 function App() {
-  //below joke fetch is successful
-  // getJoke()
 
-  //exceeded rate limit for the day, try tomorrow
-  // getMoonPhase();
-
-  //successful, figure out a way to call this function for each sign, dynamically inject sign into params
-  // getDailyHoroscope();
-
-  //successful, minimize this down to only the highs and lows
-  // getForecastSummary();
-
-  //successful, extract one word and throw it into the spanish definition one 
-  // getWordOfTheDay();
 
   return (
     <>
